@@ -52,7 +52,7 @@ async function downloadImages() {
 
         for (let i = 0; i < imageURLs.length; i++) {
             let extension = imageURLs[i].slice(-3) || 'jpg';
-            let fileName = `${count}-cat.${extension}`;
+            let fileName = `cat-${count}.${extension}`;
             let file = fs.createWriteStream('./images/' + fileName);
             let url = imageURLs[i];
 
@@ -61,16 +61,18 @@ async function downloadImages() {
 
                 file.on('finish', () => {
                     file.close();
-                    console.log(`Image downloaded as ${fileName}`);
+                    process.stdout.clearLine(0);
+                    process.stdout.cursorTo(0);
+                    process.stdout.write(`Downloading ${url} as ${fileName}`);
                 });
             }).on('error', err => {
                 fs.unlink(fileName);
-                console.error(`ERROR: Failed to download ${imageName}`);
+                console.error(`ERROR: Failed to download ${url}`);
             });
 
             count++;
         }
-        console.log(`Downloaded ${imageURLs.length} images.`);
+        console.log(`Downloading ${imageURLs.length} images.`);
     } catch (error) {
         console.log(error);
     }
