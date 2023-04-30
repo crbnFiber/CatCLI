@@ -3,7 +3,12 @@ const yargs = require('yargs');
 const axios = require('axios');
 const https = require('https');
 const fs = require('fs');
+
 const catAPI = require('../API/cat');
+let { imageDir } = require('../resources/config.json');
+
+if (imageDir.slice(-1) != '/') { imageDir += '/' }
+if (!checkDir(imageDir)) { changeDir(imageDir) }
 
 const options = yargs
     .usage(`Usage: $0 -l <limit> -b <breed>`)
@@ -17,6 +22,11 @@ const options = yargs
         describe: "Specific breed to download", 
         type: "string", 
         demandOption: false })
+    .option("cd", {
+        describe: "Change the download directory",
+        type: "string",
+        demandOption: false
+    })
     .help(true)
     .argv;
 
@@ -24,8 +34,13 @@ const argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
 let limit;
 let breed;
-let count = countFiles('./images').length + 1;
+let count = countFiles(imageDir).length + 1;
 
+if (argv.cd != null) {
+    if (argv.cd.slice(-1) != '/') { imageDir = argv.cd + '/'}
+    imageDir = argv.cd;
+    return changeDir(imageDir), console.log(`WARNING: The download path has been changed to ${imageDir}`);
+}
 if (argv.l != null || argv.limit != null) {
     limit = argv.l || argv.limit;
     if (isNaN(limit) || limit < 1 || limit > 100) { return yargs.showHelp() }
@@ -53,7 +68,7 @@ async function downloadImages() {
         for (let i = 0; i < imageURLs.length; i++) {
             let extension = imageURLs[i].slice(-3) || 'jpg';
             let fileName = `cat-${count}.${extension}`;
-            let file = fs.createWriteStream('./images/' + fileName);
+            let file = fs.createWriteStream(imageDir + fileName);
             let url = imageURLs[i];
 
             https.get(url, response => {
@@ -61,9 +76,7 @@ async function downloadImages() {
 
                 file.on('finish', () => {
                     file.close();
-                    process.stdout.clearLine(0);
-                    process.stdout.cursorTo(0);
-                    process.stdout.write(`Downloading ${url} as ${fileName}`);
+                    console.log(`Downloading ${url} as ${fileName}`);
                 });
             }).on('error', err => {
                 fs.unlink(fileName);
@@ -72,7 +85,7 @@ async function downloadImages() {
 
             count++;
         }
-        console.log(`Downloading ${imageURLs.length} images.`);
+        console.log(`Downloading ${imageURLs.length} images . . .`);
     } catch (error) {
         console.log(error);
     }
@@ -102,4 +115,25 @@ function countFiles(dirPath, filesArray) {
     });
 
     return filesArray;
+}
+
+function checkDir(dir) {
+    if (fs.existsSync(dir)) {
+        return true;
+    }
+    else { return false };
+}
+
+function changeDir(dir) {
+    try {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        if (dir.slice(-1) != '/') { dir += '/' }
+        let newDir = JSON.stringify({ imageDir: dir }, null, 2);
+        fs.writeFileSync('./resources/config.json', newDir);
+
+    } catch (error) {
+        console.log(error)
+    }
 }

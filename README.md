@@ -8,6 +8,6 @@
 ## How to use:
 #### Requires [Nodejs](https://nodejs.org/en/download).
 
-#### ~ Enter the command: `catcli <options>`
+#### ~ Enter the command: `catbot <options>`
 
-#### Example command `catcli -l 20 -b beng` will download 20 pictures of bengal cats.
+#### Example command `catbot -l 20 -b beng` will download 20 pictures of bengal cats.
