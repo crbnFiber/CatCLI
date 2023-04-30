@@ -4,7 +4,7 @@ The CatAPI CLI is a command-line interface for downloading cat images from [The 
 
 ## Installation
 
-Clone the repo or download and unzip the [source code]() and navigate to the project directory. 
+Clone the repo or download and unzip the [source code](https://github.com/crbnFiber/CatCLI/releases/download/v1.0.0/CatCLI.zip) and navigate to the project directory. 
 
 Use the [node package manager](https://nodejs.org/en/download) to install the cli.
 
