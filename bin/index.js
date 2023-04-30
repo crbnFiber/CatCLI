@@ -25,8 +25,7 @@ const options = yargs
     .option("cd", {
         describe: "Change the download directory",
         type: "string",
-        demandOption: false
-    })
+        demandOption: false })
     .help(true)
     .argv;
 

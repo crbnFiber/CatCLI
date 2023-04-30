@@ -1,13 +1,48 @@
 # CatAPI CLI
 
-### Options:
-#### `-l <int>` - An integer between 1 and 100. Defaults to 1 if omitted.
+The CatAPI CLI is a command-line interface for downloading cat images from [The Cat API](https://thecatapi.com/).
 
-#### `-b <breed-id>` - A 4 letter breed id. Valid ids can be found in [breeds.json](./resources/breeds.json). Defaults to any if omitted.
+## Installation
 
-## How to use:
-#### Requires [Nodejs](https://nodejs.org/en/download).
+Clone the repo or download and unzip the [source code]() and navigate to the project directory. 
 
-#### ~ Enter the command: `catbot <options>`
+Use the [node package manager](https://nodejs.org/en/download) to install the cli.
 
-#### Example command `catbot -l 20 -b beng` will download 20 pictures of bengal cats.
+
+```bash
+# install the cli
+npm install -g .
+
+# install the required packages
+npm install
+```
+
+## Usage
+
+Limit must be a number between 1 and 100.
+
+Breed must be a valid id from [here](./resources/breeds.json).
+
+```bash
+# Shows all of the arguments and what they do.
+catbot --help
+
+# Downloads 20 images of random cat breeds.
+catbot -l 20
+catbot --limit=20
+
+# Downloads 1 image of a bengal cat.
+catbot -b beng
+catbot --breed=beng
+
+# Downloads 20 images of bengal cats.
+catbot -l 20 -b beng
+catbot --limit=20 --breed=beng
+
+# Changes the download directory.
+catbot --cd=path
+```
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
